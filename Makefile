@@ -11,6 +11,8 @@ BIN = bin
 
 ifeq ($(OS), Windows_NT)
 	EXEC = $(BIN)/$(NAME).exe
+	W64DEVKIT = C:/w64devkit
+	CFLAGS += -I$(W64DEVKIT)/include
 	LDFLAGS += -lglew32 -lopengl32
 else
 	EXEC = $(BIN)/$(NAME)
