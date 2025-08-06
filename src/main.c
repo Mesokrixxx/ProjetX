@@ -13,8 +13,8 @@ typedef enum {
 }	bool;
 
 #define assert(c, fmt, ...)												\
-do { 																	\
-	if (!(c)) {															\
+	do { 																\
+		if (!(c)) {														\
 			fprintf(stderr, "[ASSERTION FAILED][%s::%d]\n" fmt "\n",	\
 				__FILE__, __LINE__, ##__VA_ARGS__);						\
 			exit(1);													\
