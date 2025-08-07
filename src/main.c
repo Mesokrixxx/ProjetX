@@ -5,23 +5,19 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <stdlib.h>
-#include <stdio.h>
 
-typedef enum { 
-	false, 
-	true 
-}	bool;
+#include "types.h"
+#include "log.h"
 
-#define assert(c, fmt, ...)												\
-	do { 																\
-		if (!(c)) {														\
-			fprintf(stderr, "[ASSERTION FAILED][%s::%d]\n" fmt "\n",	\
-				__FILE__, __LINE__, ##__VA_ARGS__);						\
-			exit(1);													\
-		}																\
+#define assert(c, fmt, ...)				\
+	do { 								\
+		if (!(c)) {						\
+			error(fmt, ##__VA_ARGS__);	\
+			exit(1);					\
+		}								\
 	} while (0)
 
-typedef struct {
+typedef struct state_s {
 	SDL_Window		*window;
 	SDL_GLContext	glcontext;
 	bool			running;
