@@ -5,7 +5,10 @@
 
 file_t	file_create(const char *path)
 {
-	file_t	f = {0};
+	file_t	f = {
+		.content = NULL,
+		.size = 0,
+	};
 
 	if (path)
 		file_load(&f, path);
@@ -52,6 +55,7 @@ void	file_unload(file_t *file)
 	if (file->content)
 		free(file->content);
 	else
-		warn("called file_unload() when it wasn't necessary");
+		warn("called %s() when it wasn't necessary",
+			__func__);
 	*file = (file_t){0};
 }

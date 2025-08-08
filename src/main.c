@@ -8,6 +8,7 @@
 
 #include "types.h"
 #include "log.h"
+#include "shader.h"
 
 #define assert(c, fmt, ...)				\
 	do { 								\
@@ -58,6 +59,7 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 		SDL_GL_SwapWindow(state.window);
 	}
+
 	SDL_GL_DeleteContext(state.glcontext);
 	SDL_DestroyWindow(state.window);
 	SDL_Quit();
