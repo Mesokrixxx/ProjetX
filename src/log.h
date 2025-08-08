@@ -13,16 +13,4 @@
 # define warn(fmt, ...) _PRINTLOG(stderr, "WARN", fmt, ##__VA_ARGS__)
 # define error(fmt, ...) _PRINTLOG(stderr, "ERROR", fmt, ##__VA_ARGS__)
 
-/**
-* check if an argument is null, if it is: call an error log and a return statement
-**/
-# define nullarg(arg) 											\
-	do {														\
-		if (!(arg)) {											\
-			error("argument '%s' is null (from function '%s')",	\
-				#arg, __func__);								\
-			return ;											\
-		}														\
-	} while (0)
-
 #endif
