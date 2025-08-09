@@ -9,7 +9,6 @@
 #include "types.h"
 #include "log.h"
 #include "shader.h"
-#include "mesh.h"
 #include "vectors.h"
 
 #define assert(c, fmt, ...)				\
@@ -59,60 +58,6 @@ int main(void)
 	shader_default = shader_create("res/shaders/default.vert", "res/shaders/default.frag");
 	assert(shader_valid(&shader_default), "failed to create defaultshader");
 
-	mesh_t mesh_quad = mesh_null;
-	vertex_t quadvertices[] = {
-		{ .position = v3_of(0, 1, 0) },
-		{ .position = v3_of(1, 1, 0) },
-		{ .position = v3_of(1, 0, 0) },
-		{ .position = v3_of(0, 0, 0) }
-	};
-	unsigned short indices[] = {
-		2, 1, 0, 3, 2, 0
-	};
-	mesh_quad = mesh_create(MESH_INSTANCED_ELEMENT);
-	mesh_setup(&mesh_quad, 
-		(meshsetup_t){
-			.vertices = {
-				.data = quadvertices,
-				.count = sizeof(quadvertices) / sizeof(vertex_t),
-				.unitsize = sizeof(vertex_t),
-				.usage = GL_STATIC_DRAW,
-				.attributes_count = 1,
-				.attributes = (meshattributes_t[]){
-					{
-						.gltype = GL_FLOAT,
-						.size = 3,
-					}
-				}
-			},
-			.elements = {
-				.count = sizeof(indices) / sizeof(unsigned short),
-				.data = indices,
-				.usage = GL_STATIC_DRAW,
-				.totlsize = sizeof(indices),
-				.gltype = GL_UNSIGNED_SHORT
-			},
-			.instances = {
-				.capacity = 1,
-				.unitsize = sizeof(quadinstance_t),
-				.usage = GL_STREAM_DRAW,
-				.attributes_count = 2,
-				.attributes = (meshattributes_t[]){
-					{
-						.gltype = GL_FLOAT,
-						.size = 3
-					},
-					{
-						.gltype = GL_FLOAT,
-						.size = 1,
-						.offset = offsetof(quadinstance_t, scale)
-					}
-				}
-			}
-		});
-	assert(mesh_valid(&mesh_quad), "failed to create quad mesh");
-	mesh_append(&mesh_quad, 1, &(quadinstance_t){ .position = v3_of(0, 0, 0), .scale = 0.5f});
-
 	state.running = true;
 	while (state.running)
 	{
@@ -127,11 +72,8 @@ int main(void)
 			}
 		}
 		glClear(GL_COLOR_BUFFER_BIT);
-		shader_bind(&shader_default);
-		mesh_draw(&mesh_quad, 0, GL_TRIANGLES);
 		SDL_GL_SwapWindow(state.window);
 	}
-	mesh_destroy(&mesh_quad);
 	shader_destroy(&shader_default);
 	SDL_GL_DeleteContext(state.glcontext);
 	SDL_DestroyWindow(state.window);

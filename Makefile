@@ -1,10 +1,10 @@
 NAME = ProjetX
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -Iutil
 LDFLAGS = -lSDL2
 
-SRC = $(wildcard src/*.c)
+SRC = $(wildcard src/*.c util/*.c)
 OBJ = $(SRC:.c=.o)
 
 BIN = bin
