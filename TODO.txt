@@ -1,0 +1,7 @@
+### TOFIX ### 
+- Meshes are way too hardcoded
+- GLBuffers could be less hardcoded
+
+- Better error tracking:
+ -> Less spam when warn/error is called each frames
+ -> Find the source of the error 
