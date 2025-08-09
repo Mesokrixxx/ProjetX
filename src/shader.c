@@ -8,9 +8,7 @@ static void		compile_shader(u32 *id, const char *sp, u32 type);
 
 shader_t	shader_create(const char *vsp, const char *fsp)
 {
-	shader_t	shader = {
-		.id = 0
-	};
+	shader_t	shader = shader_null;
 
 	if (vsp && fsp)
 		shader_compile(&shader, vsp, fsp);
@@ -40,7 +38,7 @@ void	shader_compile(shader_t *shader, const char *vsp, const char *fsp)
 		glGetProgramInfoLog(shader->id, 512, NULL, log);
 		error("failed to link shader with sources:\n vertex - %s\n fragment - %s\nError Log:\n%s",
 			vsp, fsp, log);
-		*shader = (shader_t){0};
+		*shader = shader_null;
 	}
 endoffunc:
 	if (vs)
@@ -57,7 +55,7 @@ void	shader_destroy(shader_t *shader)
 	else
 		warn("called %s() when it wasn't necessary",
 			__func__);
-	*shader = (shader_t){0};
+	*shader = shader_null;
 }
 
 void	shader_bind(shader_t *shader)
@@ -72,6 +70,12 @@ void	shader_bind(shader_t *shader)
 	}
 }
 
+bool	shader_valid(shader_t *shader)
+{
+	checkargv(shader, false);
+	return (glIsProgram(shader->id));
+}
+
 static void	compile_shader(u32 *id, const char *sp, u32 type)
 {
 	const char	*s;
@@ -80,7 +84,7 @@ static void	compile_shader(u32 *id, const char *sp, u32 type)
 	char		log[512];
 
 	file = file_create(sp);
-	if (!file.content)
+	if (!file_valid(&file))
 	{
 		error("failed to load %s shader at: %s", 
 			type == GL_VERTEX_SHADER ? "vertex" : "fragment",
