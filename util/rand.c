@@ -48,7 +48,7 @@ int	randint(int limit)
 
 static inline void	setseed(void)
 {
-	static bool	seedset;
+	static bool	seedset = false;
 
 	if (!seedset)
 	{
