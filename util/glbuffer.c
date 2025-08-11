@@ -24,7 +24,7 @@ static const u32	buffer_target[_GLBUFFERTYPE_COUNT] = {
 
 #define checkbuffer(bufferptr)	\
 	checkarg(bufferptr);		\
-	checkbuffertype(bufferptr)	\
+	checkbuffertype(bufferptr)	
 
 glbuffer_t	glbuffer_create(glbuffertype_t type)
 {
