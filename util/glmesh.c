@@ -3,9 +3,9 @@
 #include "log.h"
 #include <GL/glew.h>
 
-#define checkmeshtype(meshptr)						\
+#define glcheckmeshtype(glmeshptr)					\
 	do {											\
-		glmesh_t	*m = (meshptr);					\
+		glmesh_t	*m = (glmeshptr);				\
 		if (!(m->type > GLMESH_INVALID				\
 			&& m->type < _GLMESHTYPE_COUNT))		\
 		{											\
@@ -15,19 +15,19 @@
 		}											\
 	} while (0)
 
-#define checkmesh(meshptr)	\
-	checkarg(meshptr);		\
-	checkmeshtype(meshptr)
+#define glcheckmesh(glmeshptr)	\
+	checkarg(glmeshptr);		\
+	glcheckmeshtype(glmeshptr)
 
-glmesh_t	mesh_create(glmeshtype_t type)
+glmesh_t	glmesh_create(glmeshtype_t type)
 {
-	glmesh_t	mesh = mesh_null;
+	glmesh_t	mesh = glmesh_null;
 	int		expectedbuffer;
 
 	if (type >= _GLMESHTYPE_COUNT || type == GLMESH_INVALID)
 	{
 		error("given type is invalid: %d", type);
-		return (mesh_null);
+		return (glmesh_null);
 	}
 	switch (type)
 	{
@@ -40,7 +40,7 @@ glmesh_t	mesh_create(glmeshtype_t type)
 			break ;
 		default:
 			error("Mesh type isn't defined: %d", type);
-			return (mesh_null);
+			return (glmesh_null);
 	}
 	mesh.type = type;
 	for (int i = 0; i < _MESHSBUFFERCOUNT; i++)
@@ -49,19 +49,19 @@ glmesh_t	mesh_create(glmeshtype_t type)
 	if (expectedbuffer != 0)
 	{
 		error("something went wrong when creating mesh");
-		mesh_destroy(&mesh);
-		return (mesh_null);
+		glmesh_destroy(&mesh);
+		return (glmesh_null);
 	}
 	return (mesh);
 }
 
-void	mesh_setup(glmesh_t *mesh, glmeshsetup_t desc)
+void	glmesh_setup(glmesh_t *mesh, glmeshsetup_t desc)
 {
 	glmeshattributes_t	*tmp;
 	int					validbuffer = 0;
 	int					attribcount = 0;
 
-	checkmesh(mesh);
+	glcheckmesh(mesh);
 	for (int i = 0; i < _MESHSBUFFERCOUNT; i++)
 		if (glbuffer_valid(&mesh->buffers[i]))
 			validbuffer++;
@@ -122,9 +122,9 @@ void	mesh_setup(glmesh_t *mesh, glmeshsetup_t desc)
 	}
 }
 
-void	mesh_draw(glmesh_t *mesh, u64 offset, u32 glmode)
+void	glmesh_draw(glmesh_t *mesh, u64 offset, u32 glmode)
 {
-	checkmesh(mesh);
+	glcheckmesh(mesh);
 	if (mesh->icount < 1)
 	{
 		warn("trying to draw instanced mesh with no instances");
@@ -147,9 +147,9 @@ void	mesh_draw(glmesh_t *mesh, u64 offset, u32 glmode)
 	}
 }
 
-void	mesh_append(glmesh_t *mesh, u32 icount, void *instances)
+void	glmesh_append(glmesh_t *mesh, u32 icount, void *instances)
 {
-	checkmesh(mesh);
+	glcheckmesh(mesh);
 	if (mesh->type != GLMESH_INSTANCED_ELEMENT)
 	{
 		warn("trying append instances to a non instanced mesh");
@@ -172,11 +172,11 @@ void	mesh_append(glmesh_t *mesh, u32 icount, void *instances)
 	mesh->icount += icount;
 }
 
-void	mesh_destroy(glmesh_t *mesh)
+void	glmesh_destroy(glmesh_t *mesh)
 {
 	int	destroyed_buffer = 0;
 
-	checkmesh(mesh);
+	glcheckmesh(mesh);
 	for (int i = 0; i < _MESHSBUFFERCOUNT; i++)
 	{
 		if (glbuffer_valid(&mesh->buffers[i]))
@@ -191,7 +191,7 @@ void	mesh_destroy(glmesh_t *mesh)
 	*mesh = (glmesh_t){0};
 }
 
-bool	mesh_valid(glmesh_t *mesh)
+bool	glmesh_valid(glmesh_t *mesh)
 {
 	int	expectedbuffer;
 
@@ -216,8 +216,8 @@ bool	mesh_valid(glmesh_t *mesh)
 	return true;
 }
 
-void	mesh_clear(glmesh_t *mesh)
+void	glmesh_clear(glmesh_t *mesh)
 {
-	checkmesh(mesh);
+	glcheckmesh(mesh);
 	mesh->icount = 0;
 }

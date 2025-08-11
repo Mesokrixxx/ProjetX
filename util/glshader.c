@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "glshader.h"
 #include "check.h"
 #include "log.h"
 #include "file.h"
@@ -6,16 +6,16 @@
 
 static void		compile_shader(u32 *id, const char *sp, u32 type);
 
-shader_t	shader_create(const char *vsp, const char *fsp)
+glshader_t	glshader_create(const char *vsp, const char *fsp)
 {
-	shader_t	shader = shader_null;
+	glshader_t	shader = glshader_null;
 
 	if (vsp && fsp)
-		shader_compile(&shader, vsp, fsp);
+		glshader_compile(&shader, vsp, fsp);
 	return (shader);
 }
 
-void	shader_compile(shader_t *shader, const char *vsp, const char *fsp)
+void	glshader_compile(glshader_t *shader, const char *vsp, const char *fsp)
 {
 	int		success;
 	char	log[512];
@@ -38,7 +38,7 @@ void	shader_compile(shader_t *shader, const char *vsp, const char *fsp)
 		glGetProgramInfoLog(shader->id, 512, NULL, log);
 		error("failed to link shader with sources:\n vertex - %s\n fragment - %s\nError Log:\n%s",
 			vsp, fsp, log);
-		*shader = shader_null;
+		*shader = glshader_null;
 	}
 endoffunc:
 	if (vs)
@@ -47,7 +47,7 @@ endoffunc:
 		glDeleteShader(fs);
 }
 
-void	shader_destroy(shader_t *shader)
+void	glshader_destroy(glshader_t *shader)
 {
 	checkarg(shader);
 	if (shader->id)
@@ -55,10 +55,10 @@ void	shader_destroy(shader_t *shader)
 	else
 		warn("called %s() when it wasn't necessary",
 			__func__);
-	*shader = shader_null;
+	*shader = glshader_null;
 }
 
-void	shader_bind(shader_t *shader)
+void	glshader_bind(glshader_t *shader)
 {
 	static u32	binded_shader = 0;
 
@@ -70,7 +70,7 @@ void	shader_bind(shader_t *shader)
 	}
 }
 
-bool	shader_valid(shader_t *shader)
+bool	glshader_valid(glshader_t *shader)
 {
 	checkargv(shader, false);
 	return (glIsProgram(shader->id));

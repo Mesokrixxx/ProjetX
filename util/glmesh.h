@@ -28,7 +28,7 @@ typedef struct glmesh_s {
 	glmeshtype_t		type;
 }	glmesh_t;
 
-# define mesh_null ((glmesh_t){0})
+# define glmesh_null ((glmesh_t){0})
 
 typedef struct glmeshattributes_s {
 	u64		offset;
@@ -62,12 +62,12 @@ typedef struct glmeshsetup_s {
 	}	instances;
 }	glmeshsetup_t;
 
-glmesh_t	mesh_create(glmeshtype_t type);
-void		mesh_setup(glmesh_t *mesh, glmeshsetup_t desc);
-void		mesh_draw(glmesh_t *mesh, u64 offset, u32 glmode);
-void		mesh_append(glmesh_t *mesh, u32 icount, void *instances);
-void		mesh_destroy(glmesh_t *mesh);
-bool		mesh_valid(glmesh_t *mesh);
-void		mesh_clear(glmesh_t *mesh);
+glmesh_t	glmesh_create(glmeshtype_t type);
+void		glmesh_setup(glmesh_t *mesh, glmeshsetup_t desc);
+void		glmesh_draw(glmesh_t *mesh, u64 offset, u32 glmode);
+void		glmesh_append(glmesh_t *mesh, u32 icount, void *instances);
+void		glmesh_destroy(glmesh_t *mesh);
+bool		glmesh_valid(glmesh_t *mesh);
+void		glmesh_clear(glmesh_t *mesh);
 
 #endif

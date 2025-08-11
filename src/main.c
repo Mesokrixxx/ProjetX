@@ -8,7 +8,7 @@
 
 #include "types.h"
 #include "log.h"
-#include "shader.h"
+#include "glshader.h"
 #include "vectors.h"
 #include "sdltime.h"
 #include "solarsystem.h"
@@ -44,7 +44,7 @@ int main(void)
 {
 	solarsystem_t	solarsys;
 	sdltime_t		time;
-	shader_t		shader_default;
+	glshader_t		shader_default;
 	state_t			state;
 	f64				accumulated_time;
 
@@ -65,9 +65,9 @@ int main(void)
 		SDL_GetError());
 	assert(glewInit() == GLEW_OK, "failed to init glew");
 	time = time_init();
-	shader_default = shader_null;
-	shader_default = shader_create("res/shaders/default.vert", "res/shaders/default.frag");
-	assert(shader_valid(&shader_default), "failed to create defaultshader");
+	shader_default = glshader_null;
+	shader_default = glshader_create("res/shaders/default.vert", "res/shaders/default.frag");
+	assert(glshader_valid(&shader_default), "failed to create defaultshader");
 	solarsys = solarsystem_init();
 	state.tps = TPS_DEFAULT;
 	state.tps_dt = 1.0 / (f64)state.tps;
@@ -98,7 +98,7 @@ int main(void)
 		SDL_GL_SwapWindow(state.window);
 	}
 	solarsystem_end(&solarsys);
-	shader_destroy(&shader_default);
+	glshader_destroy(&shader_default);
 	SDL_GL_DeleteContext(state.glcontext);
 	SDL_DestroyWindow(state.window);
 	SDL_Quit();
