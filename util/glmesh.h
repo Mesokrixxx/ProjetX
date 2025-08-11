@@ -6,13 +6,13 @@
 
 # define _MESHSBUFFERCOUNT 4
 
-typedef enum meshtype_e : u8 {
-	MESH_INVALID,
-	MESH_INSTANCED_ELEMENT,
-	_MESHTYPE_COUNT
-}	meshtype_t;
+typedef enum glmeshtype_e : u8 {
+	GLMESH_INVALID,
+	GLMESH_INSTANCED_ELEMENT,
+	_GLMESHTYPE_COUNT
+}	glmeshtype_t;
 
-typedef struct mesh_s {
+typedef struct glmesh_s {
 	union {
 		struct {
 			glbuffer_t	vao;
@@ -25,23 +25,23 @@ typedef struct mesh_s {
 	u64					isize;
 	u32					ecount, gletype, icount;
 	u32					icap;
-	meshtype_t			type;
-}	mesh_t;
+	glmeshtype_t		type;
+}	glmesh_t;
 
-# define mesh_null ((mesh_t){0})
+# define mesh_null ((glmesh_t){0})
 
-typedef struct meshattributes_s {
+typedef struct glmeshattributes_s {
 	u64		offset;
 	u32		gltype;
 	u8		size;
 	bool	normalized;
-}	meshattributes_t;
+}	glmeshattributes_t;
 
-typedef struct meshsetup_s {
+typedef struct glmeshsetup_s {
 	struct {
 		void				*data;
 		u64					unitsize;
-		meshattributes_t	*attributes;
+		glmeshattributes_t	*attributes;
 		u32					count;
 		u32					attributes_count;
 		u32					usage;
@@ -55,19 +55,19 @@ typedef struct meshsetup_s {
 	}	elements;
 	struct {
 		u64					unitsize;
-		meshattributes_t	*attributes;
+		glmeshattributes_t	*attributes;
 		u32					attributes_count;
 		u32					capacity;
 		u32					usage;
 	}	instances;
-}	meshsetup_t;
+}	glmeshsetup_t;
 
-mesh_t	mesh_create(meshtype_t type);
-void	mesh_setup(mesh_t *mesh, meshsetup_t desc);
-void	mesh_draw(mesh_t *mesh, u64 offset, u32 glmode);
-void	mesh_append(mesh_t *mesh, u32 icount, void *instances);
-void	mesh_destroy(mesh_t *mesh);
-bool	mesh_valid(mesh_t *mesh);
-void	mesh_clear(mesh_t *mesh);
+glmesh_t	mesh_create(glmeshtype_t type);
+void		mesh_setup(glmesh_t *mesh, glmeshsetup_t desc);
+void		mesh_draw(glmesh_t *mesh, u64 offset, u32 glmode);
+void		mesh_append(glmesh_t *mesh, u32 icount, void *instances);
+void		mesh_destroy(glmesh_t *mesh);
+bool		mesh_valid(glmesh_t *mesh);
+void		mesh_clear(glmesh_t *mesh);
 
 #endif

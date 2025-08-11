@@ -2,7 +2,7 @@
 # define SOLARSYSTEM_H
 
 # include "types.h"
-# include "mesh.h"
+# include "glmesh.h"
 
 typedef enum celestialbodytype_e : u8 {
 	CELESTIALBODY_INVALID,
@@ -19,7 +19,7 @@ typedef struct celestialbody_s {
 }	celestialbody_t;
 
 typedef struct solarsystem_s {
-	mesh_t			cb_mesh;
+	glmesh_t		cb_mesh;
 	celestialbody_t	*bodies;
 	u32				bodiescount;
 }	solarsystem_t;

@@ -1,13 +1,13 @@
-#include "mesh.h"
+#include "glmesh.h"
 #include "check.h"
 #include "log.h"
 #include <GL/glew.h>
 
 #define checkmeshtype(meshptr)						\
 	do {											\
-		mesh_t	*m = (meshptr);						\
-		if (!(m->type > MESH_INVALID				\
-			&& m->type < _MESHTYPE_COUNT))			\
+		glmesh_t	*m = (meshptr);					\
+		if (!(m->type > GLMESH_INVALID				\
+			&& m->type < _GLMESHTYPE_COUNT))		\
 		{											\
 			error("Calling %s() but given mesh is "	\
 				"invalid", __func__);				\
@@ -19,19 +19,19 @@
 	checkarg(meshptr);		\
 	checkmeshtype(meshptr)
 
-mesh_t	mesh_create(meshtype_t type)
+glmesh_t	mesh_create(glmeshtype_t type)
 {
-	mesh_t	mesh = mesh_null;
+	glmesh_t	mesh = mesh_null;
 	int		expectedbuffer;
 
-	if (type >= _MESHTYPE_COUNT || type == MESH_INVALID)
+	if (type >= _GLMESHTYPE_COUNT || type == GLMESH_INVALID)
 	{
 		error("given type is invalid: %d", type);
 		return (mesh_null);
 	}
 	switch (type)
 	{
-		case (MESH_INSTANCED_ELEMENT):
+		case (GLMESH_INSTANCED_ELEMENT):
 			mesh.vao = glbuffer_create(GLBUFFER_VERTEX_ARRAY);
 			mesh.vbo = glbuffer_create(GLBUFFER_ARRAY);
 			mesh.ebo = glbuffer_create(GLBUFFER_ELEMENT);
@@ -55,9 +55,9 @@ mesh_t	mesh_create(meshtype_t type)
 	return (mesh);
 }
 
-void	mesh_setup(mesh_t *mesh, meshsetup_t desc)
+void	mesh_setup(glmesh_t *mesh, glmeshsetup_t desc)
 {
-	meshattributes_t	*tmp;
+	glmeshattributes_t	*tmp;
 	int					validbuffer = 0;
 	int					attribcount = 0;
 
@@ -68,7 +68,7 @@ void	mesh_setup(mesh_t *mesh, meshsetup_t desc)
 	glbuffer_bind(&mesh->vao);
 	switch (mesh->type)
 	{
-		case (MESH_INSTANCED_ELEMENT):
+		case (GLMESH_INSTANCED_ELEMENT):
 			if (validbuffer != 4)
 			{
 				error("Trying to setup invalid mesh");
@@ -122,7 +122,7 @@ void	mesh_setup(mesh_t *mesh, meshsetup_t desc)
 	}
 }
 
-void	mesh_draw(mesh_t *mesh, u64 offset, u32 glmode)
+void	mesh_draw(glmesh_t *mesh, u64 offset, u32 glmode)
 {
 	checkmesh(mesh);
 	if (mesh->icount < 1)
@@ -133,7 +133,7 @@ void	mesh_draw(mesh_t *mesh, u64 offset, u32 glmode)
 	glbuffer_bind(&mesh->vao);
 	switch (mesh->type)
 	{
-		case (MESH_INSTANCED_ELEMENT):
+		case (GLMESH_INSTANCED_ELEMENT):
 			glDrawElementsInstanced(
 				glmode, 
 				mesh->ecount, 
@@ -147,10 +147,10 @@ void	mesh_draw(mesh_t *mesh, u64 offset, u32 glmode)
 	}
 }
 
-void	mesh_append(mesh_t *mesh, u32 icount, void *instances)
+void	mesh_append(glmesh_t *mesh, u32 icount, void *instances)
 {
 	checkmesh(mesh);
-	if (mesh->type != MESH_INSTANCED_ELEMENT)
+	if (mesh->type != GLMESH_INSTANCED_ELEMENT)
 	{
 		warn("trying append instances to a non instanced mesh");
 		return ;
@@ -172,7 +172,7 @@ void	mesh_append(mesh_t *mesh, u32 icount, void *instances)
 	mesh->icount += icount;
 }
 
-void	mesh_destroy(mesh_t *mesh)
+void	mesh_destroy(glmesh_t *mesh)
 {
 	int	destroyed_buffer = 0;
 
@@ -188,20 +188,20 @@ void	mesh_destroy(mesh_t *mesh)
 	if (!destroyed_buffer)
 		warn("called %s() when it wasn't necessary",
 			__func__);
-	*mesh = (mesh_t){0};
+	*mesh = (glmesh_t){0};
 }
 
-bool	mesh_valid(mesh_t *mesh)
+bool	mesh_valid(glmesh_t *mesh)
 {
 	int	expectedbuffer;
 
 	checkargv(mesh, false);
-	if (!(mesh->type > MESH_INVALID
-		&& mesh->type < _MESHTYPE_COUNT))
+	if (!(mesh->type > GLMESH_INVALID
+		&& mesh->type < _GLMESHTYPE_COUNT))
 		return false;
 	switch (mesh->type)
 	{
-		case (MESH_INSTANCED_ELEMENT):
+		case (GLMESH_INSTANCED_ELEMENT):
 			expectedbuffer = 4;
 			break ;
 		default:
@@ -216,7 +216,7 @@ bool	mesh_valid(mesh_t *mesh)
 	return true;
 }
 
-void	mesh_clear(mesh_t *mesh)
+void	mesh_clear(glmesh_t *mesh)
 {
 	checkmesh(mesh);
 	mesh->icount = 0;
