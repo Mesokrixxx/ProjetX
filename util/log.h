@@ -10,7 +10,7 @@
 
 # define _PRINTLOG(io, logtype, fmt, ...)					\
 	do {													\
-		fprintf(io, "[%s][%s::%d]\n>>> " fmt "\n",				\
+		fprintf(io, "[%s][%s::%d]\n>>> " fmt "\n",			\
 			logtype, __FILE__, __LINE__, ##__VA_ARGS__);	\
 	} while (0)
 
