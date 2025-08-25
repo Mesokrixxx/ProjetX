@@ -1,23 +1,17 @@
 NAME = projetX
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -nostdlib -Wall -Wextra -Werror
 
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 
-ifeq ($(OS),Windows_NT)
-	EXEC = $(NAME).exe
-else
-	EXEC = $(NAME)
-endif
+all: $(NAME)
 
-all: $(EXEC)
-
-$(EXEC): $(OBJ)
-	$(CC) $(OBJ) $(CFLAGS) -o $(EXEC)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) $(CFLAGS) -o $(NAME)
 
 clean:
-	rm -f $(OBJ) $(EXEC)
+	rm -f $(OBJ) $(NAME)
 
 re: clean all
