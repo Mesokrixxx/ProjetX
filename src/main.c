@@ -2,7 +2,9 @@
 #include <GL/glew.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+
+#include "types.h"
+#include "shader.h"
 
 #define ASSERT(c, fmt, ...) 							\
 	do {												\
